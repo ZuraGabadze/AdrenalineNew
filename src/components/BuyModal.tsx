@@ -3,6 +3,7 @@ import { X, Copy, ExternalLink, Ticket } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { SITE_CONFIG } from '../config/site';
 import { buildTicketMessage, formatPrice } from '../config/ranks';
+import { RANK_SPRITE_MAP } from '../config/sprites';
 import { SmartImage } from './SmartImage';
 import { DiscordSvg } from './DiscordIcon';
 
@@ -46,6 +47,8 @@ export const BuyModal: React.FC = () => {
     price: buyModalRank.price,
     nickname,
   });
+  const spriteName =
+    RANK_SPRITE_MAP[buyModalRank.mode]?.[buyModalRank.id] || buyModalRank.material;
 
   return (
     <div
@@ -68,6 +71,8 @@ export const BuyModal: React.FC = () => {
                 src={buyModalRank.iconPath}
                 alt={`${buyModalRank.name} რანკის ხატულა`}
                 materialFallback={buyModalRank.material}
+                spriteFallback={spriteName}
+                size={40}
                 pixelated
                 className="w-10 h-10 object-contain animate-float-3d"
               />

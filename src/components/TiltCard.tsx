@@ -5,6 +5,7 @@ interface TiltCardProps {
   className?: string;
   maxTilt?: number;
   glareColor?: string;
+  disabled?: boolean;
 }
 
 export const TiltCard: React.FC<TiltCardProps> = ({
@@ -12,12 +13,14 @@ export const TiltCard: React.FC<TiltCardProps> = ({
   className = '',
   maxTilt = 7,
   glareColor = 'rgba(255, 122, 0, 0.14)',
+  disabled = false,
 }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [style, setStyle] = useState<React.CSSProperties>({});
   const [glareStyle, setGlareStyle] = useState<React.CSSProperties>({ opacity: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (disabled) return;
     if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     const el = cardRef.current;
     if (!el) return;

@@ -1,79 +1,184 @@
 import React, { useState, useEffect } from 'react';
-import { MaterialType } from '../config/ranks';
+import { PixelSprite } from './PixelSprite';
+import { resolveSpriteFromPathOrName } from '../config/sprites';
 
-interface SmartImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src'> {
+export type FallbackType =
+  | 'coal'
+  | 'iron'
+  | 'gold'
+  | 'diamond'
+  | 'emerald'
+  | 'netherite'
+  | 'grass'
+  | 'sword'
+  | 'logo'
+  | 'banner'
+  | 'gamemode'
+  | 'skin';
+
+interface SmartImageProps {
   src: string;
   alt: string;
-  materialFallback?: MaterialType;
+  fallbackType?: FallbackType;
+  materialFallback?: string;
+  spriteFallback?: string;
+  spriteName?: string;
   pixelated?: boolean;
+  size?: number;
+  className?: string;
+  imgClassName?: string;
 }
 
-const MATERIAL_COLORS: Record<MaterialType, { primary: string; secondary: string; highlight: string }> = {
-  coal: { primary: '#282A33', secondary: '#1B1C22', highlight: '#5A6075' },
-  iron: { primary: '#A9B2C3', secondary: '#7E8694', highlight: '#FFFFFF' },
-  gold: { primary: '#FFD03B', secondary: '#B86E00', highlight: '#FFF3A1' },
-  diamond: { primary: '#2CC5DB', secondary: '#19899E', highlight: '#D8FFFF' },
-  emerald: { primary: '#17C95B', secondary: '#0E8F3E', highlight: '#C9FFDA' },
-  netherite: { primary: '#473B49', secondary: '#2D242E', highlight: '#FF7A00' },
-};
+const imageCheckCache = new Map<string, boolean>();
 
-/**
- * Reusable <SmartImage> component:
- * 1. Tries the `.png` path first.
- * 2. If `.png` fails, automatically tries the `.svg` placeholder with the same base name.
- * 3. If both fail, renders an in-code generated crisp pixel-art SVG placeholder.
- */
+export function resolveImageSource(rawSrc?: string): string {
+  if (!rawSrc) return '';
+  const trimmed = rawSrc.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  if (/\.svg$/i.test(trimmed)) {
+    return trimmed.replace(/\.svg$/i, '.png');
+  }
+  return trimmed;
+}
+
+export function useRealPngExists(rawSrc?: string): boolean {
+  const normalized = resolveImageSource(rawSrc);
+  const [exists, setExists] = useState<boolean>(() => {
+    if (!normalized) return false;
+    return imageCheckCache.get(normalized) ?? false;
+  });
+
+  useEffect(() => {
+    if (!normalized) {
+      setExists(false);
+      return;
+    }
+    if (imageCheckCache.has(normalized)) {
+      setExists(imageCheckCache.get(normalized)!);
+      return;
+    }
+
+    let cancelled = false;
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      if (!cancelled) {
+        const valid = img.naturalWidth > 0;
+        imageCheckCache.set(normalized, valid);
+        setExists(valid);
+      }
+    };
+    img.onerror = () => {
+      if (!cancelled) {
+        imageCheckCache.set(normalized, false);
+        setExists(false);
+      }
+    };
+    img.src = normalized;
+
+    return () => {
+      cancelled = true;
+    };
+  }, [normalized]);
+
+  return exists;
+}
+
 export const SmartImage: React.FC<SmartImageProps> = ({
   src,
   alt,
-  materialFallback = 'gold',
+  fallbackType,
+  materialFallback,
+  spriteFallback,
+  spriteName,
   pixelated = false,
+  size = 128,
   className = '',
-  ...rest
+  imgClassName = '',
 }) => {
-  const baseNoExt = src.replace(/\.(png|svg|jpg|jpeg|webp)$/i, '');
-  const pngSrc = `${baseNoExt}.png`;
-  const svgSrc = `${baseNoExt}.svg`;
+  const isBannerOrLogo =
+    fallbackType === 'banner' ||
+    fallbackType === 'logo' ||
+    src.includes('/logo/') ||
+    src.includes('/banner/');
 
-  const [stage, setStage] = useState<'png' | 'svg' | 'inline'>('png');
+  const resolvedSrc = resolveImageSource(src);
+  const hasRealImage = useRealPngExists(resolvedSrc);
+
+  // Banner & logo support standard image loading with inline branded fallback
+  const [bannerStage, setBannerStage] = useState<'png' | 'svg' | 'inline'>('png');
 
   useEffect(() => {
-    setStage('png');
+    setBannerStage('png');
   }, [src]);
 
-  if (stage === 'inline') {
-    const pal = MATERIAL_COLORS[materialFallback] || MATERIAL_COLORS.gold;
+  if (isBannerOrLogo) {
+    const baseSrc = src.replace(/\.(png|svg|jpg|webp)$/i, '');
+    if (bannerStage === 'inline') {
+      if (fallbackType === 'logo' || src.includes('/logo/')) {
+        return (
+          <div className={`inline-flex items-center justify-center ${className}`} role="img" aria-label={alt}>
+            <svg viewBox="0 0 64 64" className="w-full h-full">
+              <rect x="6" y="6" width="52" height="52" rx="10" fill="#0D0D0D" stroke="#FF7A00" strokeWidth="4" />
+              <path d="M20 46L32 16L44 46H36.5L34 39H30L27.5 46H20ZM30.8 32H33.2L32 27.5L30.8 32Z" fill="#FF7A00" />
+            </svg>
+          </div>
+        );
+      }
+      return (
+        <div
+          className={`relative overflow-hidden bg-[#080808] flex items-center justify-center ${className}`}
+          role="img"
+          aria-label={alt}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(255,122,0,0.28),transparent_70%)]" />
+        </div>
+      );
+    }
+
+    const currentBannerSrc = bannerStage === 'png' ? `${baseSrc}.png` : `${baseSrc}.svg`;
     return (
-      <svg
-        viewBox="0 0 16 16"
-        role="img"
-        aria-label={alt}
-        className={`${pixelated ? 'pixelated' : ''} ${className}`}
-        shapeRendering="crispEdges"
-      >
-        <rect x="3" y="3" width="10" height="10" fill={pal.secondary} />
-        <rect x="4" y="4" width="8" height="8" fill={pal.primary} />
-        <rect x="5" y="5" width="4" height="3" fill={pal.highlight} />
-      </svg>
+      <div className={`relative overflow-hidden ${className}`}>
+        <img
+          src={currentBannerSrc}
+          alt={alt}
+          onError={() => {
+            if (bannerStage === 'png') setBannerStage('svg');
+            else setBannerStage('inline');
+          }}
+          className={`w-full h-full object-contain transition-opacity duration-300 opacity-100 ${
+            pixelated ? 'pixelated' : ''
+          } ${imgClassName}`}
+        />
+      </div>
     );
   }
 
-  const activeSrc = stage === 'png' ? pngSrc : svgSrc;
+  // Rank icons strictly follow: real .png -> <PixelSprite> (No .svg step)
+  if (hasRealImage) {
+    return (
+      <div className={`relative inline-flex items-center justify-center ${className}`}>
+        <img
+          src={resolvedSrc}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          style={{ width: size, height: size, imageRendering: 'pixelated' }}
+          className={`object-contain pixelated ${imgClassName}`}
+        />
+      </div>
+    );
+  }
+
+  const resolvedSprite = resolveSpriteFromPathOrName(
+    spriteName || spriteFallback || materialFallback || src || fallbackType
+  );
 
   return (
-    <img
-      src={activeSrc}
-      alt={alt}
-      referrerPolicy="no-referrer"
-      onError={() => {
-        if (stage === 'png') {
-          setStage('svg');
-        } else {
-          setStage('inline');
-        }
-      }}
-      className={`${pixelated ? 'pixelated' : ''} ${className}`}
-      {...rest}
-    />
+    <div className={`relative inline-flex items-center justify-center ${className}`}>
+      <PixelSprite name={resolvedSprite} size={size} alt={alt} />
+    </div>
   );
 };

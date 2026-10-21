@@ -1,69 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700;800;900&family=Silkscreen:wght@400;700&display=swap');
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --bg: #050505;
-    --bg-2: #0D0D0D;
-    --surface: #141414;
-    --border: rgba(255, 122, 0, 0.18);
-    --orange: #FF7A00;
-    --orange-light: #FFA640;
-    --orange-deep: #E85D00;
-    --glow: rgba(255, 122, 0, 0.45);
-    --text: #F5F5F5;
-    --muted: #9A9A9A;
-  }
-
-  html {
-    background-color: #050505;
-    color: #F5F5F5;
-    font-family: 'Noto Sans Georgian', -apple-system, BlinkMacSystemFont, sans-serif;
-    scroll-behavior: smooth;
-  }
-
-  body {
-    background-color: #050505;
-    color: #F5F5F5;
-    font-family: 'Noto Sans Georgian', -apple-system, BlinkMacSystemFont, sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* Custom Orange Scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #080808;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #E85D00;
-    border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #FF7A00;
-  }
+:root {
+  --bg: #050505;
+  --bg-2: #0D0D0D;
+  --surface: #141414;
+  --border: rgba(255, 122, 0, 0.18);
+  --orange: #FF7A00;
+  --orange-light: #FFA640;
+  --orange-deep: #E85D00;
+  --glow: rgba(255, 122, 0, 0.45);
+  --text: #F5F5F5;
+  --muted: #9A9A9A;
 }
 
-/* Pixel decorative font ONLY for Latin/numeric decoration (IP, rank names, numeric prices) */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans Georgian', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans Georgian', sans-serif;
+  overflow-x: hidden;
+  selection-background-color: #FF7A00;
+}
+
+::selection {
+  background: rgba(255, 122, 0, 0.35);
+  color: #ffffff;
+}
+
+/* Custom Orange Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #070707;
+  border-left: 1px solid rgba(255, 122, 0, 0.12);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #FF7A00 0%, #E85D00 100%);
+  border-radius: 2px;
+  border: 2px solid #070707;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #FFA640 0%, #FF7A00 100%);
+}
+
+/* Font utility for Latin/numeric pixel decoration ONLY */
 .font-pixel {
   font-family: 'Silkscreen', 'Noto Sans Georgian', sans-serif;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
-/* Georgian text and ₾ symbol always use Noto Sans Georgian */
 .font-georgian {
   font-family: 'Noto Sans Georgian', sans-serif;
 }
 
-/* Pixel-art rendering */
-.pixelated {
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+/* Minecraft Pixel-Stepped Block Button Clip-Path */
+.pixel-corners {
+  clip-path: polygon(
+    0 6px,
+    6px 6px,
+    6px 0,
+    calc(100% - 6px) 0,
+    calc(100% - 6px) 6px,
+    100% 6px,
+    100% calc(100% - 6px),
+    calc(100% - 6px) calc(100% - 6px),
+    calc(100% - 6px) 100%,
+    6px 100%,
+    6px calc(100% - 6px),
+    0 calc(100% - 6px)
+  );
 }
 
-/* Beveled Minecraft Block Button with pixel-stepped corners */
-.voxel-btn {
+.pixel-corners-sm {
   clip-path: polygon(
     0 4px,
     4px 4px,
@@ -78,89 +103,128 @@
     4px calc(100% - 4px),
     0 calc(100% - 4px)
   );
-  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), filter 160ms ease, box-shadow 160ms ease;
 }
 
-.voxel-btn:hover {
-  transform: translateY(-2px);
-}
-
-.voxel-btn:active {
-  transform: translateY(1px);
-}
-
-/* Extruded 3D text title shadow */
+/* Extruded 3D Title Effect */
 .extruded-title {
   text-shadow:
-    0 2px 0 #1f0d00,
-    0 4px 0 #120700,
-    0 8px 24px rgba(255, 122, 0, 0.32);
+    0 1px 0 #1f1200,
+    0 2px 0 #1f1200,
+    0 3px 0 #1a0f00,
+    0 4px 0 #140b00,
+    0 6px 20px rgba(255, 122, 0, 0.38);
 }
 
-/* Subtle glass panel */
-.voxel-panel {
-  background: linear-gradient(180deg, rgba(20, 20, 20, 0.88) 0%, rgba(12, 12, 12, 0.94) 100%);
+.extruded-orange {
+  text-shadow:
+    0 1px 0 #7a3000,
+    0 2px 0 #5e2400,
+    0 3px 0 #421900,
+    0 4px 0 #290f00,
+    0 8px 28px rgba(255, 122, 0, 0.55);
+}
+
+/* Glass Surface with subtle border glow */
+.glass-panel {
+  background: linear-gradient(165deg, rgba(22, 22, 22, 0.88) 0%, rgba(11, 11, 11, 0.94) 100%);
+  backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 122, 0, 0.18);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.85);
 }
 
-/* 3D preserve utilities */
-.preserve-3d {
-  transform-style: preserve-3d;
+.glass-panel:hover {
+  border-color: rgba(255, 122, 0, 0.36);
 }
 
-.perspective-1000 {
-  perspective: 1000px;
+/* Pixelated image rendering for skins & voxel icons */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-/* Floating animation for 3D rank icons */
+/* Soft orange radial-gradient halo behind each background Ender Pearl (no filter: drop-shadow) */
+.ender-pearl-halo::before {
+  content: '';
+  position: absolute;
+  inset: -28%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 122, 0, 0.18) 0%, rgba(255, 122, 0, 0.05) 50%, transparent 72%);
+  pointer-events: none;
+  z-index: -1;
+}
+
 @keyframes floatSlow {
   0%, 100% {
-    transform: translateY(0px) rotateY(-12deg) rotateX(6deg);
+    transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-7px) rotateY(12deg) rotateX(-4deg);
+    transform: translateY(-10px) rotate(2deg);
   }
 }
 
-.animate-float-3d {
-  animation: floatSlow 5s ease-in-out infinite;
+.animate-float-slow {
+  animation: floatSlow 5.5s ease-in-out infinite;
 }
 
-@keyframes headSpinSlow {
+/* 3D Minecraft Dropped Item rotation + float */
+@keyframes droppedItemRotateFloat {
   0% {
-    transform: rotateX(-14deg) rotateY(-28deg);
+    transform: translateY(0px) rotateX(8deg) rotateY(0deg);
+  }
+  25% {
+    transform: translateY(-7px) rotateX(8deg) rotateY(90deg);
   }
   50% {
-    transform: rotateX(-8deg) rotateY(28deg);
+    transform: translateY(0px) rotateX(8deg) rotateY(180deg);
+  }
+  75% {
+    transform: translateY(-7px) rotateX(8deg) rotateY(270deg);
   }
   100% {
-    transform: rotateX(-14deg) rotateY(-28deg);
+    transform: translateY(0px) rotateX(8deg) rotateY(360deg);
   }
 }
 
-.animate-head-3d {
-  animation: headSpinSlow 7s ease-in-out infinite;
+@keyframes droppedItemShadowPulse {
+  0%, 50%, 100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  25%, 75% {
+    transform: scale(0.82);
+    opacity: 0.48;
+  }
 }
 
-/* Keyboard accessibility focus ring */
-*:focus-visible {
-  outline: 2px solid #FF7A00;
-  outline-offset: 2px;
+.dropped-item-rotator {
+  animation: droppedItemRotateFloat 8s linear infinite;
 }
 
-/* Reduced motion support */
+.dropped-item-shadow {
+  animation: droppedItemShadowPulse 8s ease-in-out infinite;
+}
+
+@keyframes skinHeadSpin {
+  0% {
+    transform: rotateX(-14deg) rotateY(-25deg);
+  }
+  50% {
+    transform: rotateX(-8deg) rotateY(25deg);
+  }
+  100% {
+    transform: rotateX(-14deg) rotateY(-25deg);
+  }
+}
+
+.skin-cube-spin {
+  animation: skinHeadSpin 7s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .animate-float-3d,
-  .animate-head-3d {
+  .animate-float-slow,
+  .skin-cube-spin,
+  .dropped-item-rotator,
+  .dropped-item-shadow {
     animation: none !important;
   }
 }

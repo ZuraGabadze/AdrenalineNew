@@ -13,6 +13,13 @@ import { STAFF_MEMBERS } from './staff';
 import { RULE_CATEGORIES } from './rules';
 import { SITE_CONFIG } from './site';
 import { getSkinSources } from '../lib/skin';
+import {
+  SPRITES,
+  INGOT_ROWS,
+  RANK_SPRITE_MAP,
+  GAMEMODE_SPRITE_MAP,
+  resolveSpriteFromPathOrName,
+} from './sprites';
 
 test('site config matches exact ADRENALINEE server details and default skinMode', () => {
   assert.equal(SITE_CONFIG.serverName, 'ADRENALINEE');
@@ -21,6 +28,72 @@ test('site config matches exact ADRENALINEE server details and default skinMode'
   assert.deepEqual(SITE_CONFIG.ping, { min: 60, max: 90 });
   assert.equal(SITE_CONFIG.currency, '₾');
   assert.equal(SITE_CONFIG.skinMode, 'online-first');
+  assert.equal(SITE_CONFIG.showCardDetails, false);
+  assert.equal(SITE_CONFIG.gameModeImageRatio, '1983 / 793');
+  assert.deepEqual(
+    SITE_CONFIG.gameModes.map((gm) => ({ title: gm.title, image: gm.image, locked: gm.locked })),
+    [
+      { title: 'SMP', image: '/assets/gamemodes/smp.png', locked: false },
+      { title: 'BoxPvp', image: '/assets/gamemodes/boxpvp.png', locked: false },
+      { title: 'OneBlock', image: '/assets/gamemodes/oneblock.png', locked: true },
+    ]
+  );
+});
+
+test('16x16 sprites match exact dimensions, shared INGOT_ROWS, and rank/gamemode mappings', () => {
+  const spriteNames = [
+    'coal',
+    'iron',
+    'gold',
+    'netherite',
+    'diamond',
+    'emerald',
+    'grass',
+    'sword',
+    'ender_pearl',
+  ];
+  for (const name of spriteNames) {
+    const def = SPRITES[name];
+    assert.ok(def, `Missing sprite ${name}`);
+    assert.equal(def.rows.length, 16, `${name} should have 16 rows`);
+    for (let y = 0; y < 16; y++) {
+      assert.equal(def.rows[y].length, 16, `${name} row ${y} should have 16 chars`);
+      for (const ch of def.rows[y]) {
+        if (ch !== '.') {
+          assert.ok(def.palette[ch], `${name} missing palette color for char '${ch}'`);
+        }
+      }
+    }
+  }
+
+  assert.equal(SPRITES.iron.rows, INGOT_ROWS);
+  assert.equal(SPRITES.gold.rows, INGOT_ROWS);
+  assert.equal(SPRITES.netherite.rows, INGOT_ROWS);
+
+  assert.deepEqual(RANK_SPRITE_MAP.smp, {
+    vip: 'coal',
+    'vip-plus': 'iron',
+    mvp: 'gold',
+    'mvp-plus': 'diamond',
+    sponsor: 'netherite',
+  });
+  assert.deepEqual(RANK_SPRITE_MAP.boxpvp, {
+    nile: 'coal',
+    obelisk: 'iron',
+    osiris: 'gold',
+    anubis: 'diamond',
+    sponsor: 'emerald',
+  });
+  assert.deepEqual(GAMEMODE_SPRITE_MAP, {
+    smp: 'grass',
+    boxpvp: 'sword',
+    oneblock: 'grass',
+  });
+
+  assert.equal(resolveSpriteFromPathOrName('/assets/ranks/smp/sponsor.png'), 'netherite');
+  assert.equal(resolveSpriteFromPathOrName('/assets/ranks/boxpvp/sponsor.png'), 'emerald');
+  assert.equal(resolveSpriteFromPathOrName('/assets/gamemodes/boxpvp.png'), 'sword');
+  assert.equal(resolveSpriteFromPathOrName('/assets/backgrounds/ender-pearl.png'), 'ender_pearl');
 });
 
 test('getSkinSources returns exact ordered texture URLs for online-first, file-first, and files-only', () => {

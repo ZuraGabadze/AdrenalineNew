@@ -18,8 +18,9 @@ import {
   formatKitChipKa,
 } from '../config/ranks';
 import { SITE_CONFIG } from '../config/site';
+import { RANK_SPRITE_MAP } from '../config/sprites';
 import { useApp } from '../context/AppContext';
-import { SmartImage } from '../components/SmartImage';
+import { DroppedItem3D } from '../components/DroppedItem3D';
 import { TiltCard } from '../components/TiltCard';
 
 export const RankDetailPage: React.FC = () => {
@@ -46,6 +47,7 @@ export const RankDetailPage: React.FC = () => {
   const { rank, allCommands, inheritedRanks, previousRank, nextRank, upgradeDiffPrice } = data;
   const modeLabel = rank.mode === 'smp' ? 'SMP' : 'BoxPvp';
   const previewPlayerName = nickname && nickname.trim().length > 0 ? nickname.trim() : 'Steve';
+  const spriteName = RANK_SPRITE_MAP[rank.mode]?.[rank.id] || rank.material;
 
   return (
     <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-32 md:pb-16 space-y-12">
@@ -66,18 +68,14 @@ export const RankDetailPage: React.FC = () => {
 
       {/* Contiguous Hero / Purchase Module */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-        {/* Left: Large 3D Rotating Rank Icon Showcase */}
-        <TiltCard className="lg:col-span-5 rounded-2xl voxel-panel p-8 flex flex-col items-center justify-center relative overflow-hidden min-h-[300px]">
-          <div
-            className="w-44 h-44 rounded-full blur-3xl opacity-30 pointer-events-none absolute"
-            style={{ backgroundColor: rank.accentColor }}
-          />
-          <SmartImage
+        {/* Left: Large 3D Rotating Dropped Item Showcase (240px within 220-260px spec) */}
+        <TiltCard className="lg:col-span-5 rounded-2xl voxel-panel p-8 flex flex-col items-center justify-center relative overflow-hidden min-h-[340px]">
+          <DroppedItem3D
             src={rank.iconPath}
+            spriteName={spriteName}
             alt={`${rank.name} 3D ხატულა`}
-            materialFallback={rank.material}
-            pixelated
-            className="relative z-10 w-36 h-36 sm:w-44 sm:h-44 object-contain animate-float-3d drop-shadow-[0_18px_28px_rgba(0,0,0,0.9)]"
+            size={240}
+            glowColor={rank.accentColor}
           />
           <div className="relative z-10 mt-6 text-center">
             <p className="text-xs text-[#9A9A9A]">

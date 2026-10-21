@@ -2,6 +2,7 @@ import type { SkinMode } from '../lib/skin';
 
 export interface GameModeConfig {
   id: 'smp' | 'boxpvp' | 'oneblock';
+  title: string;
   name: string;
   titleKa: string;
   shortDescKa: string;
@@ -25,6 +26,65 @@ export interface TermsSection {
   paragraphs: string[];
 }
 
+const GAME_MODES: GameModeConfig[] = [
+  {
+    id: 'smp',
+    title: 'SMP',
+    name: 'SMP',
+    titleKa: 'SMP რეჟიმი',
+    shortDescKa:
+      'კლასიკური გადარჩენის რეჟიმი მეგობრებთან ერთად, ბაზების მშენებლობით, ეკონომიკითა და დაბალანსებული გეიმპლეით.',
+    fullDescKa:
+      'SMP რეჟიმი გთავაზობთ სტაბილურ და დახვეწილ გადარჩენის გარემოს. ააშენეთ საკუთარი ტერიტორია, განავითარეთ რესურსები, გამოიყენეთ დამატებითი სახლის წერტილები და ისარგებლეთ კომფორტული სამუშაო ბრძანებებით.',
+    image: '/assets/gamemodes/smp.png',
+    locked: false,
+    badgeKa: 'აქტიური',
+    storePath: '/store/smp',
+    highlightsKa: [
+      '5 უნიკალური რანკი: VIP-დან SPONSOR-მდე',
+      'დამატებითი სახლები (Homes) და პორტატული მენიუები',
+      'ექსკლუზიური კიტები და ItemEdit პერსონალიზაცია',
+    ],
+  },
+  {
+    id: 'boxpvp',
+    title: 'BoxPvp',
+    name: 'BoxPvp',
+    titleKa: 'BoxPvp რეჟიმი',
+    shortDescKa:
+      'დინამიკური არენა-ბრძოლები, რესურსების მოპოვება, გასაღებები (Gear Keys), საცავები (PlayerVaults) და სწრაფი PvP.',
+    fullDescKa:
+      'BoxPvp შექმნილია ინტენსიური ბრძოლებისა და სწრაფი პროგრესის მოყვარულთათვის. მოიპოვეთ რესურსები, გახსენით Gear Key-ები, შეინახეთ აღჭურვილობა PlayerVault-ებში და შედით დონატორების ზონაში.',
+    image: '/assets/gamemodes/boxpvp.png',
+    locked: false,
+    badgeKa: 'აქტიური',
+    storePath: '/store/boxpvp',
+    highlightsKa: [
+      '5 ეგვიპტური თემატიკის რანკი: NILE-დან SPONSOR-მდე',
+      'Gear Key გასაღებები და +8-მდე PlayerVault (/pv)',
+      'დონატორის ზონა და სწრაფი Cooldown კიტები',
+    ],
+  },
+  {
+    id: 'oneblock',
+    title: 'OneBlock',
+    name: 'OneBlock',
+    titleKa: 'OneBlock რეჟიმი',
+    shortDescKa:
+      'ახალი რეჟიმი მზადების პროცესშია. დაიწყე ერთი ბლოკიდან და გააფართოვე საკუთარი კუნძული.',
+    fullDescKa:
+      'OneBlock რეჟიმზე მიმდინარეობს აქტიური სამუშაოები. მალე შეძლებთ ერთი ბლოკიდან საკუთარი სამყაროს აშენებას. სიახლეების გასაგებად შემოგვიერთდით Discord სერვერზე.',
+    image: '/assets/gamemodes/oneblock.png',
+    locked: true,
+    badgeKa: 'SOON / მალე',
+    highlightsKa: [
+      'რეჟიმი ამჟამად დახურულია და მუშავდება',
+      'რანკების შეძენა დროებით მიუწვდომელია',
+      'გახსნის თარიღი გამოცხადდება Discord-ზე',
+    ],
+  },
+];
+
 export const SITE_CONFIG = {
   serverName: 'ADRENALINEE',
   ip: 'adrenalinee.run',
@@ -35,6 +95,8 @@ export const SITE_CONFIG = {
   },
   currency: '₾',
   showLiveStatus: true,
+  showCardDetails: false,
+  gameModeImageRatio: '1983 / 793',
   skinMode: 'online-first' as SkinMode,
   assets: {
     logo: '/assets/logo/logo.png',
@@ -51,61 +113,8 @@ export const SITE_CONFIG = {
     primaryCta: 'მაღაზია',
     secondaryCta: 'Discord',
   },
-  gamemodes: [
-    {
-      id: 'smp',
-      name: 'SMP',
-      titleKa: 'SMP რეჟიმი',
-      shortDescKa:
-        'კლასიკური გადარჩენის რეჟიმი მეგობრებთან ერთად, ბაზების მშენებლობით, ეკონომიკითა და დაბალანსებული გეიმპლეით.',
-      fullDescKa:
-        'SMP რეჟიმი გთავაზობთ სტაბილურ და დახვეწილ გადარჩენის გარემოს. ააშენეთ საკუთარი ტერიტორია, განავითარეთ რესურსები, გამოიყენეთ დამატებითი სახლის წერტილები და ისარგებლეთ კომფორტული სამუშაო ბრძანებებით.',
-      image: '/assets/gamemodes/smp.png',
-      locked: false,
-      badgeKa: 'აქტიური',
-      storePath: '/store/smp',
-      highlightsKa: [
-        '5 უნიკალური რანკი: VIP-დან SPONSOR-მდე',
-        'დამატებითი სახლები (Homes) და პორტატული მენიუები',
-        'ექსკლუზიური კიტები და ItemEdit პერსონალიზაცია',
-      ],
-    },
-    {
-      id: 'boxpvp',
-      name: 'BoxPvp',
-      titleKa: 'BoxPvp რეჟიმი',
-      shortDescKa:
-        'დინამიკური არენა-ბრძოლები, რესურსების მოპოვება, გასაღებები (Gear Keys), საცავები (PlayerVaults) და სწრაფი PvP.',
-      fullDescKa:
-        'BoxPvp შექმნილია ინტენსიური ბრძოლებისა და სწრაფი პროგრესის მოყვარულთათვის. მოიპოვეთ რესურსები, გახსენით Gear Key-ები, შეინახეთ აღჭურვილობა PlayerVault-ებში და შედით დონატორების ზონაში.',
-      image: '/assets/gamemodes/boxpvp.png',
-      locked: false,
-      badgeKa: 'აქტიური',
-      storePath: '/store/boxpvp',
-      highlightsKa: [
-        '5 ეგვიპტური თემატიკის რანკი: NILE-დან SPONSOR-მდე',
-        'Gear Key გასაღებები და +8-მდე PlayerVault (/pv)',
-        'დონატორის ზონა და სწრაფი Cooldown კიტები',
-      ],
-    },
-    {
-      id: 'oneblock',
-      name: 'OneBlock',
-      titleKa: 'OneBlock რეჟიმი',
-      shortDescKa:
-        'ახალი რეჟიმი მზადების პროცესშია. დაიწყე ერთი ბლოკიდან და გააფართოვე საკუთარი კუნძული.',
-      fullDescKa:
-        'OneBlock რეჟიმზე მიმდინარეობს აქტიური სამუშაოები. მალე შეძლებთ ერთი ბლოკიდან საკუთარი სამყაროს აშენებას. სიახლეების გასაგებად შემოგვიერთდით Discord სერვერზე.',
-      image: '/assets/gamemodes/oneblock.png',
-      locked: true,
-      badgeKa: 'SOON / მალე',
-      highlightsKa: [
-        'რეჟიმი ამჟამად დახურულია და მუშავდება',
-        'რანკების შეძენა დროებით მიუწვდომელია',
-        'გახსნის თარიღი გამოცხადდება Discord-ზე',
-      ],
-    },
-  ] as GameModeConfig[],
+  gameModes: GAME_MODES,
+  gamemodes: GAME_MODES,
   howToBuySteps: [
     {
       number: '01',
@@ -150,7 +159,7 @@ export const SITE_CONFIG = {
     title: 'შეძენის პირობები და წესები',
     updatedAt: 'განახლებულია: 2026 წელი',
     intro:
-      'წინამდებარე გვერდი განსაზღვრავს ADRENALINEE (adrenalinee.run) სერვერზე რანკებისა და პრივილეგიების შეძენის ძირითად პირობებს. გთხოვთ, ყურადღებით გაეცნოთ ქვემოთ მოცემულ პუნქტებს შეძენამდე.',
+      'წინამდებებარე გვერდი განსაზღვრავს ADRENALINEE (adrenalinee.run) სერვერზე რანკებისა და პრივილეგიების შეძენის ძირითად პირობებს. გთხოვთ, ყურადღებით გაეცნოთ ქვემოთ მოცემულ პუნქტებს შეძენამდე.',
     sections: [
       {
         id: 'payment-method',

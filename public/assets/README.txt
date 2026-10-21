@@ -29,18 +29,37 @@ upload panel in the UI.
 --------------------------------------------------------------------------------
 3. OPTIONAL BACKGROUNDS (`public/assets/backgrounds/`)
 --------------------------------------------------------------------------------
+- `public/assets/backgrounds/ender-pearl.png`
+  backgrounds/ender-pearl.png = optional 16x16 (or 256x256) pearl image.
+  Fallback chain: `.png` -> `<PixelSprite name="ender_pearl" />` (rendered at exact
+  multiples of 16px: 48, 64, 80, 96, 128, 160 px with `image-rendering: pixelated`).
+
 - `public/assets/backgrounds/hero-bg.png` (optional, 1920x1080 px)
   Optional subtle ambient texture behind sections.
 
 --------------------------------------------------------------------------------
 4. GAME MODES (`public/assets/gamemodes/`)
 --------------------------------------------------------------------------------
+gamemodes/*.png recommended 1983x793 (or any size, if the ratio in site.ts matches).
+Configure the aspect ratio in `src/config/site.ts -> gameModeImageRatio: "1983 / 793"`,
+and set local paths or full https URLs in `src/config/site.ts -> gameModes[].image`.
+
 - `public/assets/gamemodes/smp.png`
-  Recommended size: 800x450 px (16:9) or 512x512 px pixel scene
+  Recommended size: 1983x793 px (ratio `1983 / 793` from `site.ts -> gameModeImageRatio`).
+  Rendered full-bleed (`width: 100%; height: 100%; object-fit: cover; display: block;
+  image-rendering: auto`) alone in the top area of the card and header strips.
 - `public/assets/gamemodes/boxpvp.png`
-  Recommended size: 800x450 px (16:9) or 512x512 px pixel scene
+  Recommended size: 1983x793 px (ratio `1983 / 793` from `site.ts -> gameModeImageRatio`).
+  Rendered full-bleed (`width: 100%; height: 100%; object-fit: cover; display: block;
+  image-rendering: auto`) alone in the top area of the card and header strips.
 - `public/assets/gamemodes/oneblock.png`
-  Recommended size: 800x450 px (16:9) or 512x512 px pixel scene
+  Recommended size: 1983x793 px (ratio `1983 / 793` from `site.ts -> gameModeImageRatio`).
+  Rendered with `filter: grayscale(1) brightness(.55)` and the "SOON / მალე"
+  ribbon in the top-right corner while locked.
+
+Fallback: only if the image fails to load (missing file or bad URL), the same
+`gameModeImageRatio` area silently renders `<PixelSprite>` (grass / sword / grass)
+centered. No `.svg` files are used for game-mode images.
 
 --------------------------------------------------------------------------------
 5. SMP RANKS (`public/assets/ranks/smp/`)

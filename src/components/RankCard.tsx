@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { Check, ArrowRight, ShoppingCart } from 'lucide-react';
 import { RankConfig } from '../config/ranks';
 import { SITE_CONFIG } from '../config/site';
+import { RANK_SPRITE_MAP } from '../config/sprites';
 import { useApp } from '../context/AppContext';
-import { SmartImage } from './SmartImage';
+import { DroppedItem3D } from './DroppedItem3D';
 import { TiltCard } from './TiltCard';
 
 interface RankCardProps {
@@ -13,7 +14,7 @@ interface RankCardProps {
 
 export const RankCard: React.FC<RankCardProps> = ({ rank }) => {
   const { openBuyModal, triggerClickSound } = useApp();
-  const modeLabel = rank.mode === 'smp' ? 'SMP' : 'BoxPvp';
+  const spriteName = RANK_SPRITE_MAP[rank.mode]?.[rank.id] || rank.material;
 
   return (
     <TiltCard className="h-full rounded-2xl voxel-panel p-6 flex flex-col justify-between group hover:border-[#FF7A00]/55 transition-colors">
@@ -24,18 +25,14 @@ export const RankCard: React.FC<RankCardProps> = ({ rank }) => {
           <span className="text-[#F5F5F5]/75 shrink-0">{rank.durationKa}</span>
         </div>
 
-        {/* 3D Floating Pixel Icon Stage */}
-        <div className="relative h-36 rounded-xl bg-[#09090B] border border-white/5 flex items-center justify-center mb-5 overflow-hidden">
-          <div
-            className="absolute w-24 h-24 rounded-full blur-2xl opacity-30 pointer-events-none"
-            style={{ backgroundColor: rank.accentColor }}
-          />
-          <SmartImage
+        {/* 3D Dropped Item Stage (size 128px within 120-140px spec) */}
+        <div className="relative h-44 rounded-xl bg-[#09090B] border border-white/5 flex items-center justify-center mb-5 overflow-hidden">
+          <DroppedItem3D
             src={rank.iconPath}
+            spriteName={spriteName}
             alt={`${rank.name} რანკის 3D ხატულა`}
-            materialFallback={rank.material}
-            pixelated
-            className="relative z-10 w-20 h-20 object-contain animate-float-3d drop-shadow-[0_10px_16px_rgba(0,0,0,0.85)]"
+            size={128}
+            glowColor={rank.accentColor}
           />
         </div>
 
