@@ -1,0 +1,6 @@
+{
+  "name": "ADRENALINEE — Minecraft სერვერის მაღაზია",
+  "description": "ADRENALINEE (adrenalinee.run) — ქართული პრემიუმ Minecraft სერვერის ოფიციალური მაღაზია. შეიძინეთ SMP და BoxPvp რანკები, გაეცანით წესებს და შემოგვიერთდით.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

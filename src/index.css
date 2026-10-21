@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg: #050505;
+    --bg-2: #0D0D0D;
+    --surface: #141414;
+    --border: rgba(255, 122, 0, 0.18);
+    --orange: #FF7A00;
+    --orange-light: #FFA640;
+    --orange-deep: #E85D00;
+    --glow: rgba(255, 122, 0, 0.45);
+    --text: #F5F5F5;
+    --muted: #9A9A9A;
+  }
+
+  html {
+    background-color: #050505;
+    color: #F5F5F5;
+    font-family: 'Noto Sans Georgian', -apple-system, BlinkMacSystemFont, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #050505;
+    color: #F5F5F5;
+    font-family: 'Noto Sans Georgian', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Custom Orange Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #080808;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #E85D00;
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #FF7A00;
+  }
+}
+
+/* Pixel decorative font ONLY for Latin/numeric decoration (IP, rank names, numeric prices) */
+.font-pixel {
+  font-family: 'Silkscreen', 'Noto Sans Georgian', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* Georgian text and ₾ symbol always use Noto Sans Georgian */
+.font-georgian {
+  font-family: 'Noto Sans Georgian', sans-serif;
+}
+
+/* Pixel-art rendering */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Beveled Minecraft Block Button with pixel-stepped corners */
+.voxel-btn {
+  clip-path: polygon(
+    0 4px,
+    4px 4px,
+    4px 0,
+    calc(100% - 4px) 0,
+    calc(100% - 4px) 4px,
+    100% 4px,
+    100% calc(100% - 4px),
+    calc(100% - 4px) calc(100% - 4px),
+    calc(100% - 4px) 100%,
+    4px 100%,
+    4px calc(100% - 4px),
+    0 calc(100% - 4px)
+  );
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), filter 160ms ease, box-shadow 160ms ease;
+}
+
+.voxel-btn:hover {
+  transform: translateY(-2px);
+}
+
+.voxel-btn:active {
+  transform: translateY(1px);
+}
+
+/* Extruded 3D text title shadow */
+.extruded-title {
+  text-shadow:
+    0 2px 0 #1f0d00,
+    0 4px 0 #120700,
+    0 8px 24px rgba(255, 122, 0, 0.32);
+}
+
+/* Subtle glass panel */
+.voxel-panel {
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.88) 0%, rgba(12, 12, 12, 0.94) 100%);
+  border: 1px solid rgba(255, 122, 0, 0.18);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.75);
+}
+
+/* 3D preserve utilities */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Floating animation for 3D rank icons */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotateY(-12deg) rotateX(6deg);
+  }
+  50% {
+    transform: translateY(-7px) rotateY(12deg) rotateX(-4deg);
+  }
+}
+
+.animate-float-3d {
+  animation: floatSlow 5s ease-in-out infinite;
+}
+
+@keyframes headSpinSlow {
+  0% {
+    transform: rotateX(-14deg) rotateY(-28deg);
+  }
+  50% {
+    transform: rotateX(-8deg) rotateY(28deg);
+  }
+  100% {
+    transform: rotateX(-14deg) rotateY(-28deg);
+  }
+}
+
+.animate-head-3d {
+  animation: headSpinSlow 7s ease-in-out infinite;
+}
+
+/* Keyboard accessibility focus ring */
+*:focus-visible {
+  outline: 2px solid #FF7A00;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-float-3d,
+  .animate-head-3d {
+    animation: none !important;
+  }
+}
